@@ -45,9 +45,12 @@
         const { requestConfig } = this.get();
         this.set({ downloadFinished: false });
         http.send(requestConfig).then(result => {
-          console.log(JSON.parse(result));
           const resultJSON = JSON.parse(result);
-          this.set({ downloadFinished: true, resImageUrl: resultJSON[0].url });
+          const src = resultJSON[0].url;
+          const tempImg = new Image();
+          tempImg.src = src;
+          tempImg.onload = () =>
+            this.set({ downloadFinished: true, resImageUrl: src });
         });
       },
     },
