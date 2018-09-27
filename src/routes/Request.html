@@ -1,11 +1,15 @@
 <AppBarModifier title="Requests"/>
 <div class="result">
+  {#if !downloadFinished}
   <div class="place-holder">
     SEM IMAGEM
   </div>
+  {:else}
+    <img src={resImageUrl} alt="result-image"/>
+  {/if}
 </div>
 <div class="btn-wrapper">
-  <Button>
+  <Button on:click="getImage()">
     Carregar Imagem
   </Button>
 </div>
@@ -21,7 +25,7 @@
     data() {
       return {
         requestConfig: {
-          url: 'ttp://myapi.com/',
+          url: 'https://api.thecatapi.com/v1/images/search?',
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
             'Cache-Control': 'no-cache',
@@ -30,14 +34,21 @@
           },
           method: 'GET',
           data: JSON.stringify({ title: 'Test', body: 'This is a Test.' }),
-          connect: 'EV',
+          connect: 'DEV',
         },
+        downloadFinished: false,
+        resImageUrl: '',
       };
     },
     methods: {
       getImage() {
         const { requestConfig } = this.get();
-        http.send(requestConfig);
+        this.set({ downloadFinished: false });
+        http.send(requestConfig).then(result => {
+          console.log(JSON.parse(result));
+          const resultJSON = JSON.parse(result);
+          this.set({ downloadFinished: true, resImageUrl: resultJSON[0].url });
+        });
       },
     },
   };
@@ -68,6 +79,15 @@
     width: 120px;
     height: 120px;
     border: dashed gray;
+    margin: 0 auto;
+  }
+
+  .result img {
+    display: block;
+    text-align: center;
+    padding-top: 40px;
+    width: 120px;
+    height: auto;
     margin: 0 auto;
   }
 </style>
