@@ -1,0 +1,73 @@
+<AppBarModifier title="Requests"/>
+<div class="result">
+  <div class="place-holder">
+    SEM IMAGEM
+  </div>
+</div>
+<div class="btn-wrapper">
+  <Button>
+    Carregar Imagem
+  </Button>
+</div>
+
+<script>
+  import http from '@mamba/pos/api/http.js';
+
+  export default {
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+      Button: '@mamba/button',
+    },
+    data() {
+      return {
+        requestConfig: {
+          url: 'ttp://myapi.com/',
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Cache-Control': 'no-cache',
+            Authorization:
+              'CDBDE4E6DC4E6AC1845606D0720BAFA557FA046347876CAA3986872AC1123852',
+          },
+          method: 'GET',
+          data: JSON.stringify({ title: 'Test', body: 'This is a Test.' }),
+          connect: 'EV',
+        },
+      };
+    },
+    methods: {
+      getImage() {
+        const { requestConfig } = this.get();
+        http.send(requestConfig);
+      },
+    },
+  };
+</script>
+
+<style type="text/postcss">
+  .btn-wrapper {
+    display: block;
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .result {
+    display: block;
+    width: 120 px;
+    height: auto;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .result .place-holder {
+    display: block;
+    text-align: center;
+    padding-top: 40px;
+    color: gray;
+    width: 120px;
+    height: 120px;
+    border: dashed gray;
+    margin: 0 auto;
+  }
+</style>

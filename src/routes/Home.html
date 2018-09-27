@@ -1,0 +1,62 @@
+<AppBarModifier title="CookBook" />
+
+{#each cookbook as receipt, n}
+  <div class="receipt">
+    <a href={receipt.path}>
+      <img src={receipt.imgPath} alt="receipt"/>
+    </a>
+    <div class="caption">{n+1+'-'+receipt.caption}</div>
+  </div>
+{/each}
+
+<script>
+  export default {
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+    },
+    data() {
+      return {
+        cookbook: [
+          {
+            imgPath: './assets/images/icons/requests.svg',
+            caption: 'Requests',
+            path: '/request',
+          },
+          {
+            imgPath: './assets/images/icons/requests.svg',
+            caption: 'Requests',
+            path: '/request',
+          },
+        ],
+      };
+    },
+    methods: {},
+  };
+</script>
+
+<style type="text/postcss">
+  .receipt {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100px;
+    height: 100px;
+    overflow-y: hidden;
+    margin: 10px 10px;
+    border-radius: 5px;
+    background-color: white;
+  }
+
+  .receipt img {
+    display: block;
+    width: 75px;
+    height: auto;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .caption {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+  }
+</style>

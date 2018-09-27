@@ -1,0 +1,92 @@
+{
+  "name": "cookbook",
+  "version": "0.0.1",
+  "description": "Aplicativo para guiar novos desenvolvedores como desenvolver aplicativos coma  MambaSDK.",
+  "mamba": {
+    "id": 13160,
+    "appName": "cookbook",
+    "iconPath": "assets/logo.bmp",
+    "listInMainMenu": true,
+    "appTechnology": "1",
+    "appType": "0",
+    "appCreationDate": "2018-09-27T16:01:15",
+    "appPasswordProtectionLevel": "0",
+    "appKey": "11-11-11-11"
+  },
+  "license": "Apache-2.0",
+  "author": "Stone Payments - Mamba Team",
+  "contributors": [
+    "Christian Kaisermann <christian.kaisermann@stone.com.br>"
+  ],
+  "engines": {
+    "node": ">= 8.11.3",
+    "npm": ">= 5"
+  },
+  "scripts": {
+    "start": "mamba app start",
+    "build": "mamba app build",
+    "build:dev": "mamba app build -d",
+    "build-browser": "mamba app build -t browser",
+    "build-browser:dev": "mamba app build -d -t browser",
+    "serve": "mamba app serve",
+    "analyze": "mamba app analyze",
+    "lint": "mamba app lint",
+    "format": "mamba app format"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{html,svelte}": [
+        "eslint --fix",
+        "stylelint --fix",
+        "git add"
+      ],
+      "*.js": [
+        "prettier --write",
+        "eslint --fix",
+        "git add"
+      ],
+      "*.{pcss,css}": [
+        "stylelint --fix",
+        "git add"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@mamba/cli": "^1.0.0-rc.12",
+    "@mamba/configs": "^1.0.0-rc.12",
+    "@mamba/webpack": "^1.0.0-rc.12",
+    "babel-core": "^7.0.0-bridge.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.6.0",
+    "http-server": "^0.11.1",
+    "husky": "^1.0.0",
+    "lint-staged": "^7.3.0",
+    "postcss": "^7.0.3",
+    "prettier": "^1.14.3",
+    "quickenv": "^0.0.6",
+    "stylelint": "^9.5.0",
+    "svelte-preprocess": "^2.3.2",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1"
+  },
+  "dependencies": {
+    "@mamba/app": "^1.0.0-rc.12",
+    "@mamba/appbar": "^1.0.0-rc.12",
+    "@mamba/button": "^1.0.0-rc.12",
+    "@mamba/dialog": "^1.0.0-rc.12",
+    "@mamba/icon": "^1.0.0-rc.12",
+    "@mamba/pos": "^1.0.0-rc.12",
+    "@mamba/printable": "^1.0.0-rc.12",
+    "@mamba/store": "^1.0.0-rc.12",
+    "@mamba/styles": "^1.0.0-rc.12",
+    "svelte": "2.13.5",
+    "svelte-page": "1.2.3"
+  },
+  "rootDir": "/home/lancelloti/Stone/Projects/POS/Apps/pos-mamba-app-cookbook"
+}
