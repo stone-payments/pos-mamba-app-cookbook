@@ -1,0 +1,37 @@
+<AppBarModifier title="Dados"></AppBarModifier>
+<div class="menu">
+  <a href="data/save">
+    <Button width="100%">
+      Novo
+    </Button>
+  </a>
+  <a href="data/list">
+    <Button width="100%">
+      Listar
+    </Button>
+  </a>
+</div>
+
+<script>
+  export default {
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+      Button: '@mamba/button',
+    },
+  };
+</script>
+
+<style>
+  .menu {
+    display: block;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 100%;
+    margin-top: 40%;
+  }
+
+  .menu a {
+    display: block;
+    margin-top: 15px;
+  }
+</style>

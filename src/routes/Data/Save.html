@@ -1,0 +1,70 @@
+<Input label="Nome"
+  alphanumeric
+  bind:value="name"
+  autofocus
+/>
+<Input label="Idade"
+  validation={validateAge}
+  bind:isValid="valid"
+  bind:value="age"
+/>
+{#if valid}
+<MoneyInput label="Total"
+  bind:value="total"
+/>
+<div class="btn-wrapper">
+  <Button on:click="saveUser()">
+    Adicionar
+  </Button>
+</div>
+{/if}
+
+<script>
+  import Storage from '@mamba/pos/api/storage.js';
+
+  export default {
+    components: {
+      Input: '@mamba/input',
+      MoneyInput: '@mamba/input/Money.html',
+      Button: '@mamba/button',
+    },
+    data() {
+      return {
+        validateAge(age) {
+          if (parseInt(age, 10) < 18) {
+            return { isValid: false };
+          }
+          return { isValid: true };
+        },
+        valid: false,
+        name: '',
+        age: '',
+        total: '',
+      };
+    },
+    methods: {
+      saveUser() {
+        const { name, age, total } = this.get();
+        const user = { name, age, total };
+        console.log(user);
+        if (Storage.get('users')) {
+          const users = JSON.parse(Storage.get('users'));
+          users.push(user);
+          Storage.set('users', JSON.stringify(users));
+        } else {
+          Storage.set('users', `${JSON.stringify([user])}`);
+        }
+      },
+    },
+  };
+</script>
+
+<style>
+  .btn-wrapper {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+</style>

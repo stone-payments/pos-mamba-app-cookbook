@@ -1,0 +1,35 @@
+<Collection title="Usuários">
+  {#each users as user}
+    <Row label={user.name}>
+      <div slot="controller">
+        <Icon symbol="chevron-right" on:click="gotoCheck(user)"/>
+      </div>
+    </Row>
+  {/each}
+</Collection>
+
+
+<script>
+  import Storage from '@mamba/pos/api/storage.js';
+
+  export default {
+    components: {
+      Icon: '@mamba/icon/Icon.html',
+      Collection: '@mamba/collection/Collection.html',
+      Row: '@mamba/collection/Row.html',
+    },
+    data() {
+      return {
+        users: [],
+      };
+    },
+    oncreate() {
+      this.set({ users: JSON.parse(Storage.get('users')) });
+    },
+    methods: {
+      gotoCheck(user) {
+        this.root.router.go('/data/check', user);
+      },
+    },
+  };
+</script>
