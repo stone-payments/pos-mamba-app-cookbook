@@ -5,11 +5,33 @@
     SEM IMAGEM
   </div>
   {:else}
-    <img src={resImageUrl} alt="result-image"/>
+    {#await loadImagePromise}
+      <div class="loading">
+        <CircularProgress speed="7" height="50"/>
+      </div>
+    {:then}
+      <img src={resImageUrl} alt="result-image"/>
+    {:catch}
+      Error Loading Image.
+    {/await}
   {/if}
 </div>
+
+<PromisedDialog
+  promise={requestPromise}
+  on:success="loadImageFromData()"
+  on:failure="console.log(event)" ref:dialog>
+  {#await requestPromise}
+    Request API Data . . .
+  {:then}
+    Data Loaded !
+  {:catch}
+    Data Request Failed :(
+  {/await}
+</PromisedDialog>
+
 <div class="btn-wrapper">
-  <Button on:click="getImage()">
+  <Button on:click="requestApiData()">
     Carregar Imagem
   </Button>
 </div>
@@ -21,11 +43,13 @@
     components: {
       AppBarModifier: '@mamba/appbar/Modifier.html',
       Button: '@mamba/button',
+      PromisedDialog: '@mamba/dialog/Promised.html',
+      CircularProgress: '@mamba/progress/Circular.html',
     },
     data() {
       return {
         requestConfig: {
-          url: 'https://api.thecatapi.com/v1/images/search?',
+          url: 'https://api.thecatapi.com/v1/images/search?size=med&',
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
             'Cache-Control': 'no-cache',
@@ -33,24 +57,41 @@
               'CDBDE4E6DC4E6AC1845606D0720BAFA557FA046347876CAA3986872AC1123852',
           },
           method: 'GET',
-          data: JSON.stringify({ title: 'Test', body: 'This is a Test.' }),
           connect: 'DEV',
         },
         downloadFinished: false,
         resImageUrl: '',
+        requestPromise: null,
+        loadImagePromise: null,
+        data: null,
       };
     },
     methods: {
-      getImage() {
-        const { requestConfig } = this.get();
-        this.set({ downloadFinished: false });
-        http.send(requestConfig).then(result => {
-          const resultJSON = JSON.parse(result);
-          const src = resultJSON[0].url;
-          const tempImg = new Image();
-          tempImg.src = src;
-          tempImg.onload = () =>
-            this.set({ downloadFinished: true, resImageUrl: src });
+      requestApiData() {
+        const { requestConfig } = this.get(); // get requestConfig props
+        this.set({
+          downloadFinished: false,
+          // starting the request, so downloadFinished is false
+          requestPromise: http
+            .send(requestConfig)
+            .then(result =>
+              this.set({ data: JSON.parse(result)[0], downloadFinished: true }),
+            ),
+        });
+      },
+      loadImageFromData() {
+        this.set({
+          loadImagePromise: new Promise((resolve, reject) => {
+            const { data } = this.get();
+            console.log('load');
+            const tempImg = new Image(); // new image to receive url image
+            tempImg.src = data.url;
+            tempImg.onload = () => {
+              this.set({ resImageUrl: data.url }); // loads image
+              resolve();
+            };
+            tempImg.onerror = () => reject();
+          }),
         });
       },
     },
@@ -68,10 +109,10 @@
 
   .result {
     display: block;
-    width: 120 px;
-    height: auto;
-    text-align: center;
-    margin-top: 40px;
+    width: 120px;
+    height: 120px;
+    margin: 40px auto;
+    overflow: hidden;
   }
 
   .result .place-holder {
@@ -85,12 +126,13 @@
     margin: 0 auto;
   }
 
-  .result img {
+  .result img,
+  .loading {
     display: block;
     text-align: center;
     padding-top: 40px;
     width: 120px;
-    height: auto;
+    max-height: 120px;
     margin: 0 auto;
   }
 </style>
