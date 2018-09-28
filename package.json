@@ -83,6 +83,7 @@
     "@mamba/icon": "^1.0.0-rc.12",
     "@mamba/pos": "^1.0.0-rc.12",
     "@mamba/printable": "^1.0.0-rc.12",
+    "@mamba/progress": "^1.0.0-rc.15",
     "@mamba/store": "^1.0.0-rc.12",
     "@mamba/styles": "^1.0.0-rc.12",
     "svelte": "2.13.5",
