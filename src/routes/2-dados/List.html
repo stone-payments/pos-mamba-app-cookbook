@@ -1,0 +1,65 @@
+{#if users.length > 0}
+  <Collection title="Usuários">
+    {#each users as user}
+      <Row label={user.name} on:click="gotoCheck(user)">
+        <div slot="controller">
+          <Icon symbol="chevron-right"/>
+        </div>
+      </Row>
+    {/each}
+  </Collection>
+{:else}
+  <div class="icon">
+    <RoundIcon symbol="alert" size="giant"/>
+  </div>
+
+  <div class="caption">
+    Nenhum Usuário Cadastrado
+  </div>
+{/if}
+
+<script>
+  import Storage from '@mamba/pos/api/storage.js';
+
+  export default {
+    components: {
+      Icon: '@mamba/icon/Icon.html',
+      RoundIcon: '@mamba/icon/Round.html',
+      Collection: '@mamba/collection/Collection.html',
+      Row: '@mamba/collection/Row.html',
+    },
+    data() {
+      return {
+        users: [],
+      };
+    },
+    oncreate() {
+      if (Storage.get('users')) {
+        this.set({
+          users: JSON.parse(Storage.get('users')),
+        });
+      }
+    },
+    methods: {
+      gotoCheck(user) {
+        this.root.router.go('/2-dados/user', user);
+      },
+    },
+  };
+</script>
+
+<style>
+  .icon {
+    display: block;
+    text-align: center;
+    margin-top: 20%;
+    margin-bottom: 5%;
+  }
+
+  .caption {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+  }
+</style>

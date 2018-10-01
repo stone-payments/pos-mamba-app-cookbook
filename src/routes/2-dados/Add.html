@@ -1,0 +1,84 @@
+<Input label="Nome"
+  alphanumeric
+  bind:value="name"
+  autofocus
+  on:submit="refs.ageInput.focus()"
+/>
+
+<Input label="Idade"
+  ref:ageInput
+  validation={validateAge}
+  bind:isValid="valid"
+  bind:value="age"
+  validateOn="input"
+  on:submitValid="refs.moneyInput.focus()"
+/>
+
+{#if valid}
+  <MoneyInput
+    ref:moneyInput
+    label="Total"
+    bind:value="total"
+    on:submit="saveUser()"
+  />
+
+  <Button on:click="saveUser()" bottom size="full">
+    Adicionar
+  </Button>
+{/if}
+
+<Dialog ref:successDialog>
+  <RoundIcon symbol="check" size="giant"/>
+  <p style="margin-top: 10px;">Usuário Registrado !</p>
+</Dialog>
+
+<script>
+  import Storage from '@mamba/pos/api/storage.js';
+
+  export default {
+    components: {
+      Dialog: '@mamba/dialog',
+      RoundIcon: '@mamba/icon/Round.html',
+      Input: '@mamba/input',
+      MoneyInput: '@mamba/input/Money.html',
+      Button: '@mamba/button',
+    },
+    data() {
+      return {
+        validateAge(age) {
+          if (parseInt(age, 10) < 18) {
+            return {
+              isValid: false,
+              msg: 'Deve ser maior que 18 anos',
+            };
+          }
+          return {
+            isValid: true,
+          };
+        },
+        valid: false,
+        name: '',
+        age: '',
+        total: '',
+      };
+    },
+    methods: {
+      saveUser() {
+        const { name, age, total } = this.get();
+        const user = { name, age, total };
+
+        if (Storage.get('users')) {
+          const users = JSON.parse(Storage.get('users'));
+          users.push(user);
+          Storage.set('users', JSON.stringify(users));
+        } else {
+          Storage.set('users', `${JSON.stringify([user])}`);
+        }
+
+        this.refs.successDialog.open(1000).then(() => {
+          this.root.router.go('/2-dados');
+        });
+      },
+    },
+  };
+</script>

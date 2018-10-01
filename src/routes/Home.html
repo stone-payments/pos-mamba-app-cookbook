@@ -1,12 +1,12 @@
 <AppBarModifier title="CookBook" />
 
 {#each cookbook as receipt, n}
-  <div class="receipt">
-    <a href={receipt.path}>
-      <img src={receipt.imgPath} alt="receipt"/>
-    </a>
-    <div class="caption">{n+1+'-'+receipt.caption}</div>
-  </div>
+  <a href={receipt.path}>
+    <div class="receipt">
+        <img src={receipt.imgPath} alt="receipt"/>
+      <div class="caption">{n+1+'- '+receipt.caption}</div>
+    </div>
+  </a>
 {/each}
 
 <script>
@@ -20,12 +20,12 @@
           {
             imgPath: './assets/images/icons/requests.svg',
             caption: 'Requests',
-            path: '/request',
+            path: '/1-request',
           },
           {
-            imgPath: './assets/images/icons/requests.svg',
-            caption: 'Requests',
-            path: '/request',
+            imgPath: './assets/images/icons/database.svg',
+            caption: 'Dados',
+            path: '/2-dados',
           },
         ],
       };
@@ -35,6 +35,10 @@
 </script>
 
 <style type="text/postcss">
+  a {
+    color: black;
+  }
+
   .receipt {
     display: inline-block;
     vertical-align: middle;
@@ -48,9 +52,9 @@
 
   .receipt img {
     display: block;
-    width: 75px;
+    width: 50px;
     height: auto;
-    margin: 0 auto;
+    margin: 10px auto;
     text-align: center;
   }
 

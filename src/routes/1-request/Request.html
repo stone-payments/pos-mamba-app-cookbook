@@ -1,0 +1,123 @@
+<AppBarModifier title="Requests"/>
+
+<div class="result">
+  {#if !resImageUrl}
+    <div class="placeholder">
+      SEM IMAGEM
+    </div>
+  {:else}
+    <img src={resImageUrl} alt="result-image"/>
+  {/if}
+</div>
+
+<PromisedDialog
+  ref:dialog
+  promise={requestPromise}
+  delay={1000}
+  on:failure="console.log(event)"
+>
+  {#await requestPromise}
+    <div class="h-absolute-center">
+      <CircularProgress speed={10} height="50"/>
+      <br>
+      <br>
+      <div style="white-space: nowrap;">Requesting image ...</div>
+    </div>
+  {:then}
+    Image Loaded !
+  {:catch}
+    Image request failed :(
+  {/await}
+</PromisedDialog>
+
+<Button on:click="requestApiData()" bottom size="full">
+  Carregar imagem
+</Button>
+
+<script>
+  import http from '@mamba/pos/api/http.js';
+
+  export default {
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+      Button: '@mamba/button',
+      PromisedDialog: '@mamba/dialog/Promised.html',
+      CircularProgress: '@mamba/progress/Circular.html',
+    },
+    data() {
+      return {
+        requestConfig: {
+          url: 'https://api.thecatapi.com/v1/images/search?size=med&',
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Cache-Control': 'no-cache',
+            Authorization:
+              'CDBDE4E6DC4E6AC1845606D0720BAFA557FA046347876CAA3986872AC1123852',
+          },
+          method: 'GET',
+          connect: 'DEV',
+        },
+        downloadFinished: false,
+        resImageUrl: '',
+        requestPromise: null,
+      };
+    },
+    methods: {
+      requestApiData() {
+        // get requestConfig props
+        const { requestConfig } = this.get();
+
+        this.set({
+          downloadFinished: false,
+          // starting the request, so downloadFinished is false
+          requestPromise: http
+            .send(requestConfig)
+            .then(result => JSON.parse(result)[0])
+            .then(
+              data =>
+                new Promise((resolve, reject) => {
+                  // new image to receive url image
+                  const tempImg = new Image();
+                  tempImg.src = data.url;
+                  // loads image
+                  tempImg.onload = () => {
+                    this.set({ resImageUrl: data.url });
+                    resolve();
+                  };
+                  tempImg.onerror = () => reject();
+                }),
+            ),
+        });
+      },
+    },
+  };
+</script>
+
+<style type="text/postcss">
+  .result {
+    display: block;
+    width: 120px;
+    height: 120px;
+    margin: 40px auto;
+    overflow: hidden;
+  }
+
+  .result .placeholder {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: gray;
+    width: 120px;
+    height: 120px;
+    border: dashed gray;
+    margin: 0 auto;
+  }
+
+  .result img {
+    display: block;
+    text-align: center;
+    width: 120px;
+    max-height: 120px;
+    margin: 0 auto;
+  }
+</style>
