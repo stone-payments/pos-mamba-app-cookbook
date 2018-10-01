@@ -89,7 +89,7 @@
     "@mamba/store": "^1.0.0-rc.16",
     "@mamba/styles": "^1.0.0-rc.16",
     "svelte": "2.13.5",
-    "svelte-page": "2.0.0"
+    "svelte-page": "1.2.3"
   },
   "rootDir": "/home/lancelloti/Stone/Projects/POS/Apps/pos-mamba-app-cookbook"
 }

@@ -13,5 +13,5 @@ export default {
   '/data/*': DataTemplate,
   '/data/save': DataSave,
   '/data/list': DataList,
-  '/data/check/:user': DataCheck,
+  '/data/check': DataCheck,
 };

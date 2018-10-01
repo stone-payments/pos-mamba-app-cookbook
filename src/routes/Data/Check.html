@@ -1,17 +1,43 @@
-<div class="profile-img">
-
+<div class="profile-icon">
+  <RoundIcon symbol="account" size="giant"/>
 </div>
 
-<div class="profile-description">
-  <h3>{params.name}</h3>
-  <p>Idade: {params.age}</p>
-  <p>Valor: {params.tota}</p>
+<div class="profile-data">
+  <h2>{name}</h2>
+  <p>Idade: {age}</p>
+  <p>Total: {total}</p>
 </div>
 
 <script>
   export default {
+    components: {
+      RoundIcon: '@mamba/icon/Round.html',
+    },
     data() {
       return {};
     },
+    oncreate() {
+      console.log(this);
+    },
   };
 </script>
+
+
+<style>
+  .profile-icon {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+
+  .profile-data {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .profile-data h2 {
+    margin-bottom: 10px;
+  }
+</style>

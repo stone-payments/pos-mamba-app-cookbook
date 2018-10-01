@@ -1,9 +1,9 @@
 {#if users.length > 0}
 <Collection title="Usuários">
   {#each users as user}
-    <Row label={user.name}>
+    <Row label={user.name} on:click="gotoCheck(user)">
       <div slot="controller">
-        <Icon symbol="chevron-right" on:click="gotoCheck(user)"/>
+        <Icon symbol="chevron-right"/>
       </div>
     </Row>
   {/each}

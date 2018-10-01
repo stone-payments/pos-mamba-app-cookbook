@@ -83,12 +83,11 @@
         this.set({
           loadImagePromise: new Promise((resolve, reject) => {
             const { data } = this.get();
-            console.log('load');
             const tempImg = new Image(); // new image to receive url image
             tempImg.src = data.url;
             tempImg.onload = () => {
               this.set({ resImageUrl: data.url }); // loads image
-              resolve();  
+              resolve();
             };
             tempImg.onerror = () => reject();
           }),

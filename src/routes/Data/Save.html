@@ -1,3 +1,8 @@
+<Dialog ref:successDialog>
+  <RoundIcon symbol="check" size="giant"/>
+  <p style="margin-top: 10px;">Usuário Registrado !</p>
+</Dialog>
+
 <Input label="Nome"
   alphanumeric
   bind:value="name"
@@ -7,6 +12,7 @@
   validation={validateAge}
   bind:isValid="valid"
   bind:value="age"
+  validateOn="input"
 />
 {#if valid}
 <MoneyInput label="Total"
@@ -24,6 +30,8 @@
 
   export default {
     components: {
+      Dialog: '@mamba/dialog',
+      RoundIcon: '@mamba/icon/Round.html',
       Input: '@mamba/input',
       MoneyInput: '@mamba/input/Money.html',
       Button: '@mamba/button',
@@ -46,7 +54,6 @@
       saveUser() {
         const { name, age, total } = this.get();
         const user = { name, age, total };
-        console.log(user);
         if (Storage.get('users')) {
           const users = JSON.parse(Storage.get('users'));
           users.push(user);
@@ -54,6 +61,7 @@
         } else {
           Storage.set('users', `${JSON.stringify([user])}`);
         }
+        this.refs.successDialog.open(1000);
       },
     },
   };
