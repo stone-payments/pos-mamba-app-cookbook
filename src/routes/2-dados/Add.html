@@ -1,29 +1,36 @@
-<Dialog ref:successDialog>
-  <RoundIcon symbol="check" size="giant"/>
-  <p style="margin-top: 10px;">Usuário Registrado !</p>
-</Dialog>
-
 <Input label="Nome"
   alphanumeric
   bind:value="name"
   autofocus
+  on:submit="refs.ageInput.focus()"
 />
+
 <Input label="Idade"
+  ref:ageInput
   validation={validateAge}
   bind:isValid="valid"
   bind:value="age"
   validateOn="input"
+  on:submitValid="refs.moneyInput.focus()"
 />
+
 {#if valid}
-<MoneyInput label="Total"
-  bind:value="total"
-/>
-<div class="btn-wrapper">
-  <Button on:click="saveUser()">
+  <MoneyInput
+    ref:moneyInput
+    label="Total"
+    bind:value="total"
+    on:submit="saveUser()"
+  />
+
+  <Button on:click="saveUser()" bottom size="full">
     Adicionar
   </Button>
-</div>
 {/if}
+
+<Dialog ref:successDialog>
+  <RoundIcon symbol="check" size="giant"/>
+  <p style="margin-top: 10px;">Usuário Registrado !</p>
+</Dialog>
 
 <script>
   import Storage from '@mamba/pos/api/storage.js';
@@ -40,9 +47,14 @@
       return {
         validateAge(age) {
           if (parseInt(age, 10) < 18) {
-            return { isValid: false };
+            return {
+              isValid: false,
+              msg: 'Deve ser maior que 18 anos',
+            };
           }
-          return { isValid: true };
+          return {
+            isValid: true,
+          };
         },
         valid: false,
         name: '',
@@ -54,6 +66,7 @@
       saveUser() {
         const { name, age, total } = this.get();
         const user = { name, age, total };
+
         if (Storage.get('users')) {
           const users = JSON.parse(Storage.get('users'));
           users.push(user);
@@ -61,18 +74,11 @@
         } else {
           Storage.set('users', `${JSON.stringify([user])}`);
         }
-        this.refs.successDialog.open(1000);
+
+        this.refs.successDialog.open(1000).then(() => {
+          this.root.router.go('/2-dados');
+        });
       },
     },
   };
 </script>
-
-<style>
-  .btn-wrapper {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-</style>

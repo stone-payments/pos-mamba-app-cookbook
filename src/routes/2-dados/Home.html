@@ -1,14 +1,11 @@
-<AppBarModifier title="Dados"></AppBarModifier>
-<div class="menu">
-  <a href="data/save">
-    <Button width="100%">
-      Novo
-    </Button>
+<AppBarModifier title="Dados" />
+
+<div class="menu h-absolute-center">
+  <a href="/2-dados/add" shortcut="1">
+    <Button width="100%">1 - Novo</Button>
   </a>
-  <a href="data/list">
-    <Button width="100%">
-      Listar
-    </Button>
+  <a href="/2-dados/list" shortcut="2">
+    <Button width="100%">2 - Listar</Button>
   </a>
 </div>
 
@@ -21,16 +18,15 @@
   };
 </script>
 
-<style>
+<style type="text/postcss">
   .menu {
     display: block;
     padding-left: 20px;
     padding-right: 20px;
     width: 100%;
-    margin-top: 40%;
   }
 
-  .menu a {
+  .menu a + a {
     display: block;
     margin-top: 15px;
   }

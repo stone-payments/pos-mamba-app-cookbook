@@ -1,40 +1,38 @@
 <AppBarModifier title="Requests"/>
+
 <div class="result">
-  {#if !downloadFinished}
-  <div class="place-holder">
-    SEM IMAGEM
-  </div>
+  {#if !resImageUrl}
+    <div class="placeholder">
+      SEM IMAGEM
+    </div>
   {:else}
-    {#await loadImagePromise}
-      <div class="loading">
-        <CircularProgress speed="7" height="50"/>
-      </div>
-    {:then}
-      <img src={resImageUrl} alt="result-image"/>
-    {:catch}
-      Error Loading Image.
-    {/await}
+    <img src={resImageUrl} alt="result-image"/>
   {/if}
 </div>
 
 <PromisedDialog
+  ref:dialog
   promise={requestPromise}
-  on:success="loadImageFromData()"
-  on:failure="console.log(event)" ref:dialog>
+  delay={1000}
+  on:failure="console.log(event)"
+>
   {#await requestPromise}
-    Request API Data . . .
+    <div class="h-absolute-center">
+      <CircularProgress speed={10} height="50"/>
+      <br>
+      <br>
+      <div style="white-space: nowrap;">Requesting image ...</div>
+    </div>
   {:then}
-    Data Loaded !
+    Image Loaded !
   {:catch}
-    Data Request Failed :(
+    Image request failed :(
   {/await}
 </PromisedDialog>
 
-<div class="btn-wrapper">
-  <Button on:click="requestApiData()">
-    Carregar Imagem
-  </Button>
-</div>
+<Button on:click="requestApiData()" bottom size="full">
+  Carregar imagem
+</Button>
 
 <script>
   import http from '@mamba/pos/api/http.js';
@@ -62,35 +60,33 @@
         downloadFinished: false,
         resImageUrl: '',
         requestPromise: null,
-        loadImagePromise: null,
-        data: null,
       };
     },
     methods: {
       requestApiData() {
-        const { requestConfig } = this.get(); // get requestConfig props
+        // get requestConfig props
+        const { requestConfig } = this.get();
+
         this.set({
           downloadFinished: false,
           // starting the request, so downloadFinished is false
           requestPromise: http
             .send(requestConfig)
-            .then(result =>
-              this.set({ data: JSON.parse(result)[0], downloadFinished: true }),
+            .then(result => JSON.parse(result)[0])
+            .then(
+              data =>
+                new Promise((resolve, reject) => {
+                  // new image to receive url image
+                  const tempImg = new Image();
+                  tempImg.src = data.url;
+                  // loads image
+                  tempImg.onload = () => {
+                    this.set({ resImageUrl: data.url });
+                    resolve();
+                  };
+                  tempImg.onerror = () => reject();
+                }),
             ),
-        });
-      },
-      loadImageFromData() {
-        this.set({
-          loadImagePromise: new Promise((resolve, reject) => {
-            const { data } = this.get();
-            const tempImg = new Image(); // new image to receive url image
-            tempImg.src = data.url;
-            tempImg.onload = () => {
-              this.set({ resImageUrl: data.url }); // loads image
-              resolve();
-            };
-            tempImg.onerror = () => reject();
-          }),
         });
       },
     },
@@ -98,14 +94,6 @@
 </script>
 
 <style type="text/postcss">
-  .btn-wrapper {
-    display: block;
-    position: fixed;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-  }
-
   .result {
     display: block;
     width: 120px;
@@ -114,10 +102,10 @@
     overflow: hidden;
   }
 
-  .result .place-holder {
-    display: block;
+  .result .placeholder {
+    display: table-cell;
+    vertical-align: middle;
     text-align: center;
-    padding-top: 40px;
     color: gray;
     width: 120px;
     height: 120px;
@@ -125,11 +113,9 @@
     margin: 0 auto;
   }
 
-  .result img,
-  .loading {
+  .result img {
     display: block;
     text-align: center;
-    padding-top: 40px;
     width: 120px;
     max-height: 120px;
     margin: 0 auto;
