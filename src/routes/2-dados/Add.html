@@ -67,12 +67,12 @@
         const { name, age, total } = this.get();
         const user = { name, age, total };
 
-        if (Storage.get('users')) {
-          const users = Storage.get('users');
+        if (Storage.getItem('users')) {
+          const users = Storage.getItem('users');
           users.push(user);
-          Storage.set('users', users);
+          Storage.setItem('users', users);
         } else {
-          Storage.set('users', [user]);
+          Storage.setItem('users', [user]);
         }
 
         this.refs.successDialog.open(1000).then(() => {

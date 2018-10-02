@@ -34,7 +34,7 @@
       };
     },
     oncreate() {
-      const users = Storage.get('users');
+      const users = Storage.getItem('users');
       if (users) {
         this.set({ users });
       }
