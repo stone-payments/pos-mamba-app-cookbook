@@ -68,11 +68,11 @@
         const user = { name, age, total };
 
         if (Storage.get('users')) {
-          const users = JSON.parse(Storage.get('users'));
+          const users = Storage.get('users');
           users.push(user);
-          Storage.set('users', JSON.stringify(users));
+          Storage.set('users', users);
         } else {
-          Storage.set('users', `${JSON.stringify([user])}`);
+          Storage.set('users', [user]);
         }
 
         this.refs.successDialog.open(1000).then(() => {

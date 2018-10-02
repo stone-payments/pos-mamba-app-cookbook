@@ -34,10 +34,9 @@
       };
     },
     oncreate() {
-      if (Storage.get('users')) {
-        this.set({
-          users: JSON.parse(Storage.get('users')),
-        });
+      const users = Storage.get('users');
+      if (users) {
+        this.set({ users });
       }
     },
     methods: {
