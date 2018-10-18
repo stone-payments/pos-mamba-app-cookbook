@@ -5,6 +5,7 @@ import Data from './routes/3-dados/Home.html';
 import DataList from './routes/3-dados/List.html';
 import DataAdd from './routes/3-dados/Add.html';
 import DataUser from './routes/3-dados/User.html';
+import Printing from './routes/4-impressao/Home.html';
 
 export default {
   '/': Home,
@@ -14,4 +15,5 @@ export default {
   '/3-dados/add': DataAdd,
   '/3-dados/list': DataList,
   '/3-dados/user': DataUser,
+  '/4-impressao': Printing,
 };

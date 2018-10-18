@@ -1,0 +1,103 @@
+<AppBarModifier title="Impressão"/>
+<MoneyInput label="Total" ref:total autofocus/>
+
+<Row
+  label="Enviar por e-mail?"
+  description={sendEmail ? 'Tecla ajuda = "@" e atalhos = "."' : ''}
+  showExtra={sendEmail}
+  on:showExtra="refs.email.focus()"
+  on:hideExtra="refs.total.focus()"
+>
+  <div slot="controller">
+    <Switch bind:checked="sendEmail"/>
+  </div>
+  <div slot="extra">
+    <Input label="Email" alphanumeric ref:email autofocus/>
+  </div>
+</Row>
+
+<Button size="full" bottom on:click="callPayment()">Pagar</Button>
+
+
+<Keystroke key="shortcuts" on:keystroke="typeCharacter('.')"/>
+<Keystroke key="help" on:keystroke="typeCharacter('@')"/>
+
+<Printable ref:ticket>
+  <div class="ticket">
+    <h1>Seu Ingresso</h1>
+    <br>
+    <div>
+      <QRCode size="medium" value="http://app.suavalidacao.com/"/>
+    </div>
+    <br>
+    <span>Volte sempre ;)</span>
+  </div>
+</Printable>
+
+
+
+<script>
+  import Payment from '@mamba/pos/api/payment.js';
+
+  export default {
+    components: {
+      AppBarModifier: '@mamba/appbar/Modifier.html',
+      Keystroke: '@mamba/app/Keystroke.html',
+      Input: '@mamba/input',
+      MoneyInput: '@mamba/input/Money.html',
+      Switch: '@mamba/switch',
+      Button: '@mamba/button',
+      Printable: '@mamba/printable',
+      QRCode: '@mamba/qrcode',
+      Row: '@mamba/collection/Row.html',
+    },
+    data() {
+      return { sendEmail: false };
+    },
+    methods: {
+      typeCharacter(char) {
+        this.refs.email.append(char);
+      },
+      callPayment() {
+        const { sendEmail } = this.get();
+        const amount = parseInt(this.refs.total.get().rawValue, 10);
+        Payment.pay({
+          amount,
+          min_installments: 1,
+          max_installments: 5,
+          editable_amount: false,
+        })
+          .then(result => {
+            // send Email with receipt
+            // as you can see we are not sending any email just
+            // representing it using a console.log()
+            // there many services that can do that such as:
+            //  node-madrill or implement it on your backend.
+            if (sendEmail) {
+              const userEmail = this.refs.email.value || '';
+              console.log(`Sending Email to: ${userEmail}\n value:${result}`);
+            }
+            this.refs.ticket.print().then(() => {
+              console.log('aqui');
+              this.root.router.go('/');
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+    },
+  };
+</script>
+
+<style>
+  .ticket {
+    text-align: center;
+    color: black;
+  }
+
+  .ticket span {
+    color: inherit;
+  }
+</style>
+

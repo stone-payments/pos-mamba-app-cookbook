@@ -1,12 +1,10 @@
 <AppBarModifier title="CookBook" />
 
 {#each cookbook as receipt, n}
-  <a href={receipt.path}>
-    <div class="receipt">
-        <img src={receipt.imgPath} alt="receipt"/>
-      <div class="caption">{n+1+'- '+receipt.caption}</div>
-    </div>
-  </a>
+  <div class="receipt" on:click="goTo(receipt.path)">
+      <img src={receipt.imgPath} alt="receipt"/>
+    <div class="caption">{n+1+'- '+receipt.caption}</div>
+  </div>
 {/each}
 
 <script>
@@ -32,18 +30,23 @@
             caption: 'Dados',
             path: '/3-dados',
           },
+          {
+            imgPath: './assets/images/icons/receipt.svg',
+            caption: 'Impressão',
+            path: '/4-impressao',
+          },
         ],
       };
     },
-    methods: {},
+    methods: {
+      goTo(path) {
+        this.root.router.go(path);
+      },
+    },
   };
 </script>
 
 <style type="text/postcss">
-  a {
-    color: black;
-  }
-
   .receipt {
     display: inline-block;
     vertical-align: middle;
