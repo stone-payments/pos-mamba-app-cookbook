@@ -1,6 +1,7 @@
 <App>
   <AppBar title="Template"/>
   <Router {routes} />
+  <Debugger/>
 </App>
 
 <script>
@@ -12,6 +13,7 @@
       App: '@mamba/app',
       Router: 'svelte-page',
       AppBar: '@mamba/appbar',
+      Debugger: './components/Debugger.html',
     },
     store: () => store,
     data() {
