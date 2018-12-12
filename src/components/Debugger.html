@@ -1,14 +1,18 @@
-  <div class="content" class:hide="display === false">
-    <div class="header">
-        Mamba Console
-    </div>
-    <div class="debug-display" ref:display>
-    </div>
+<div class="content" class:hide="!display">
+  <div class="header">
+    Mamba Console
   </div>
+  <div class="debug-display" ref:display></div>
+</div>
+
 <Keystroke key="help" on:keystroke="set({ display: !display })"/>
 
 <script>
   import Keystroke from '@mamba/app/Keystroke.html';
+
+  const oLog = console.log;
+  const oWarn = console.warn;
+  const oError = console.error;
 
   export default {
     components: {
@@ -25,11 +29,14 @@
       };
     },
     oncreate() {
-      // if (__DEV__ && __POS__) {
-      window.console.log = this.log.bind(this);
-      window.console.warn = this.warn.bind(this);
-      window.console.error = this.error.bind(this);
-      // }
+      console.log = this.log.bind(this);
+      console.warn = this.warn.bind(this);
+      console.error = this.error.bind(this);
+    },
+    ondestroy() {
+      console.log = oLog;
+      console.warn = oWarn;
+      console.error = oError;
     },
     methods: {
       _createNode(text) {
