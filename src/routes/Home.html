@@ -8,6 +8,10 @@
 {/each}
 
 <script>
+  import requestImg from '../assets/images/icons/requests.svg';
+  import databaseImg from '../assets/images/icons/database.svg';
+  import receiptImg from '../assets/images/icons/receipt.svg';
+
   export default {
     components: {
       AppBarModifier: '@mamba/appbar/Modifier.html',
@@ -16,22 +20,22 @@
       return {
         cookbook: [
           {
-            imgPath: './assets/images/icons/requests.svg',
+            imgPath: requestImg,
             caption: 'Request GET',
             path: '/1-request-get',
           },
           {
-            imgPath: './assets/images/icons/requests.svg',
+            imgPath: requestImg,
             caption: 'Request POST',
             path: '/2-request-post',
           },
           {
-            imgPath: './assets/images/icons/database.svg',
+            imgPath: databaseImg,
             caption: 'Dados',
             path: '/3-dados',
           },
           {
-            imgPath: './assets/images/icons/receipt.svg',
+            imgPath: receiptImg,
             caption: 'Impressão',
             path: '/4-impressao',
           },
