@@ -12,7 +12,7 @@
     "appCreationDate": "2018-09-27T16:01:15",
     "appPasswordProtectionLevel": "0",
     "appKey": "11-11-11-11",
-    "stoneApp": true
+    "stoneApp": false
   },
   "license": "Apache-2.0",
   "author": "Stone Payments - Mamba Team",
