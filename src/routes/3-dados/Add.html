@@ -33,9 +33,7 @@
 </Dialog>
 
 <script>
-  // import Storage from '@mamba/pos/api/storage.js';
-  import ValidateForm from '../../helpers/validateForm.js';
-
+  import Storage from '@mamba/pos/api/storage.js';
 
   export default {
     components: {
@@ -67,25 +65,19 @@
     methods: {
       saveUser() {
         const { name, age, total } = this.get();
-        const inputs = {
-          name,
-          age,
-          total,
-        };
-        ValidateForm(inputs);
-        // const user = { name, age, total };
+        const user = { name, age, total };
 
-        // if (Storage.getItem('users')) {
-        //   const users = Storage.getItem('users');
-        //   users.push(user);
-        //   Storage.setItem('users', users);
-        // } else {
-        //   Storage.setItem('users', [user]);
-        // }
+        if (Storage.getItem('users')) {
+          const users = Storage.getItem('users');
+          users.push(user);
+          Storage.setItem('users', users);
+        } else {
+          Storage.setItem('users', [user]);
+        }
 
-        // this.refs.successDialog.open(1000).then(() => {
-        //   this.root.router.go('/3-dados');
-        // });
+        this.refs.successDialog.open(1000).then(() => {
+          this.root.router.go('/3-dados');
+        });
       },
     },
   };
