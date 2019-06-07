@@ -35,7 +35,7 @@
 </Button>
 
 <script>
-  import http from '@mamba/pos/api/http.js';
+  import Http from '@mamba/pos/api/http.js';
 
   export default {
     components: {
@@ -70,7 +70,7 @@
         this.set({
           downloadFinished: false,
           // starting the request, so downloadFinished is false
-          requestPromise: http
+          requestPromise: Http
             .send(requestConfig)
             .then(result => JSON.parse(result)[0])
             .then(
