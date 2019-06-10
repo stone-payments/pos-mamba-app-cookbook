@@ -60,6 +60,7 @@
       },
       callPayment() {
         const { sendEmail } = this.get();
+        console.log(sendEmail);
         const amount = parseInt(this.refs.total.get().rawValue, 10);
         Payment.pay({
           amount,
