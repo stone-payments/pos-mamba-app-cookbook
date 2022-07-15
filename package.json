@@ -90,7 +90,7 @@
     "@mamba/qrcode": "^1.0.0-rc.27",
     "@mamba/store": "^1.0.0-rc.27",
     "@mamba/styles": "^1.0.0-rc.27",
-    "svelte": "2.15.1",
+    "svelte": "3.49.0",
     "svelte-page": "2.0.5"
   }
 }
