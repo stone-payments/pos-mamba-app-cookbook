@@ -58,7 +58,7 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
+    "@babel/core": "^7.20.12",
     "@mamba/cli": "^1.0.0-rc.27",
     "@mamba/configs": "^1.0.0-rc.27",
     "@mamba/webpack": "^1.0.0-rc.27",
